@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% import 'bootstrap/wtf.html' as wtf %}
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Top 10 Colours</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico"/>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+          rel="stylesheet" type="text/css"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="static/css/styles.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body class="masthead">
+<div class="container text-center">
+    {% if form %}
+    <h1>Select image</h1>
+    <h3><em>to sample top 10 colors </em></h3>
+    <form class="form" method="POST" enctype="multipart/form-data">
+        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    </form>
+    {% elif file %}
+    <img id="up-photo" src="{{ url_for('static', filename= '/uploads/'+ file) }}"/>
+
+    <div class="container">
+        <div class="row">
+            {% for col in colors %}
+            <div class="col">
+                <button style="background-color:rgb{{col}}" type="button" class="btn btn-primary"
+                        onclick="alert('RGB CODE IS {{col}}')">GET
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <a type="button" class="btn btn-primary" href="{{url_for('upload')}}">Next</a>
+    {% endif %}
+</div>
+</body>
+</html>

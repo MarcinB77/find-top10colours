@@ -28,7 +28,7 @@
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
     </form>
     {% elif file %}
-    <img id="up-photo" src="{{ url_for('static', filename= '/uploads/'+ file) }}"/>
+    <img id="up-photo" src="{{ url_for(filename= '/uploads/'+ file) }}"/>
 
     <div class="container">
         <div class="row">

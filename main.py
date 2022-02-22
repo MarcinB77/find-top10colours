@@ -17,10 +17,12 @@ class PhotoForm(FlaskForm):
     submit = SubmitField("Upload")
 
 
+UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "verysecretkey"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 Bootstrap(app)
 
@@ -40,7 +42,7 @@ def upload():
         file = form.photo.data
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(f"static/uploads/{filename}")
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('show', file=filename))
 
     return render_template('index.html', form=form)

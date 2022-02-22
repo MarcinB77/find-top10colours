@@ -32,7 +32,7 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload():
-    files = glob.glob('uploads/*')
+    files = glob.glob('static/uploads/*')
     for f in files:
         os.remove(f)
     form = PhotoForm()
@@ -40,7 +40,7 @@ def upload():
         file = form.photo.data
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(f"uploads/{filename}")
+            file.save(f"static/uploads/{filename}")
             return redirect(url_for('show', file=filename))
 
     return render_template('index.html', form=form)
@@ -48,7 +48,7 @@ def upload():
 
 @app.route('/<file>')
 def show(file):
-    colors = sample_colors(f"uploads/{file}")
+    colors = sample_colors(f"static/uploads/{file}")
     return render_template('index.html', file=file, colors=colors)
 
 

@@ -1,5 +1,4 @@
 import os
-import glob
 import numpy as np
 from PIL import Image
 import pandas as pd
@@ -34,9 +33,9 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload():
-    files = glob.glob('static/uploads/*')
-    for f in files:
-        os.remove(f)
+    for filename in os.listdir(UPLOAD_FOLDER):
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        os.remove(filepath)
     form = PhotoForm()
     if form.validate_on_submit():
         file = form.photo.data

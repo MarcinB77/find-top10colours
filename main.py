@@ -50,7 +50,7 @@ def upload():
 
 @app.route('/<file>')
 def show(file):
-    colors = sample_colors(f"static/uploads/{file}")
+    colors = sample_colors(os.path.join(app.config['UPLOAD_FOLDER'], file))
     return render_template('index.html', file=file, colors=colors)
 
 

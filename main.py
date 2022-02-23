@@ -1,10 +1,8 @@
 import os
-import time
-
+import faiss
 import numpy as np
 from PIL import Image
 import pandas as pd
-from sklearn.cluster import KMeans
 from flask import Flask, render_template, url_for
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -57,9 +55,6 @@ def show(file):
 
 
 def sample_colors(file_path):
-    while not os.path.exists(file_path):
-        time.sleep(1)
-
     uploaded_img = Image.open(file_path)
     img_array = np.array(uploaded_img)
     try:
@@ -69,14 +64,12 @@ def sample_colors(file_path):
         rgb_img_array = np.array(rgb_im)
         colors_array = np.reshape(rgb_img_array, (img_array.shape[0] * img_array.shape[1], 3))
 
-    clt = KMeans(n_clusters=10)
-    clt.fit(colors_array)
+    kmeans = faiss.Kmeans(d=colors_array.shape[1], k=10, niter=300, nredo=10)
+    kmeans.train(colors_array.astype(np.float32))
 
-    colors_df = pd.DataFrame(clt.cluster_centers_)
+    colors_df = pd.DataFrame(kmeans.centroids)
 
-    top10colors = colors_df.groupby(colors_df.columns.tolist(), as_index=False).size() \
-        .sort_values(by='size', ascending=False).reset_index(drop=True)
-    top10colors = top10colors.astype({0: "int", 1: "int", 2: "int"})
+    top10colors = colors_df.astype({0: "int", 1: "int", 2: "int"})[::-1]
 
     rgb_list = [(row[0], row[1], row[2]) for index, row in top10colors.iterrows()]
 

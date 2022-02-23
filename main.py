@@ -41,7 +41,7 @@ def upload():
         file = form.photo.data
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
             return redirect(url_for('show', file=filename))
 
     return render_template('index.html', form=form)
@@ -49,7 +49,7 @@ def upload():
 
 @app.route('/<file>')
 def show(file):
-    colors = sample_colors(os.path.join(app.config['UPLOAD_FOLDER'], file))
+    colors = sample_colors(os.path.join(UPLOAD_FOLDER, file))
     return render_template('index.html', file=file, colors=colors)
 
 

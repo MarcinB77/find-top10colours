@@ -34,8 +34,9 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload():
     for filename in os.listdir(UPLOAD_FOLDER):
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
-        os.remove(filepath)
+        if filename != 'favicon.ico':
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+            os.remove(filepath)
     form = PhotoForm()
     if form.validate_on_submit():
         file = form.photo.data

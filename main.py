@@ -1,4 +1,6 @@
 import os
+import time
+
 import numpy as np
 from PIL import Image
 import pandas as pd
@@ -55,6 +57,9 @@ def show(file):
 
 
 def sample_colors(file_path):
+    while not os.path.exists(file_path):
+        time.sleep(1)
+
     uploaded_img = Image.open(file_path)
     img_array = np.array(uploaded_img)
     try:
